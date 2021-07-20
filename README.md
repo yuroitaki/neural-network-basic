@@ -1,3 +1,6 @@
+# Disclaimer
+This is a forked project from [Michael Nielsen's](https://github.com/mnielsen/neural-networks-and-deep-learning).
+
 # Code samples for "Neural Networks and Deep Learning"
 
 This repository contains code samples for my book on ["Neural Networks
