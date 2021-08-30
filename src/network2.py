@@ -156,11 +156,14 @@ class Network(object):
         n = len(training_data)
         evaluation_cost, evaluation_accuracy = [], []
         training_cost, training_accuracy = [], []
+        initial_eta = eta
         for j in xrange(epochs):
             random.shuffle(training_data)
             mini_batches = [
                 training_data[k:k+mini_batch_size]
                 for k in xrange(0, n, mini_batch_size)]
+            eta = anneal_eta(eta, initial_eta, evaluation_accuracy)
+            print("Scheduled eta: %s" % eta)
             for mini_batch in mini_batches:
                 self.update_mini_batch(
                     mini_batch, eta, lmbda, len(training_data))
@@ -330,3 +333,12 @@ def sigmoid(z):
 def sigmoid_prime(z):
     """Derivative of the sigmoid function."""
     return sigmoid(z)*(1-sigmoid(z))
+
+def anneal_eta(eta, initial_eta, evaluation_accuracy):
+    if len(evaluation_accuracy) < 10:
+        return initial_eta
+    if eta / initial_eta <= 1.0/128:
+        return eta
+    if max(evaluation_accuracy[-10:]) == evaluation_accuracy[-10]:
+        return eta / 2
+    return eta
